@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<style>
+    form {
+        display: flex;
+        gap: 30px;          /* spacing between fields */
+        align-items: flex-start;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;   /* label above input */
+    }
+</style>
+
+    <main>
+        <p>Input Information</p>
+        <form method="POST" action="/">
+            <label for="batter">Batter:</label>
+            <input type="text" id="batter" name="batter" required><br><br>
+
+            <label for="strikes">Strikes:</label>
+            <input type="strikes" id="strikes" name="strikes" required><br><br>
+
+            <label for="balls">Balls:</label>
+            <input type="balls" id="balls" name="balls" required><br><br>
+            
+            <label>
+            <input type="radio" name="choice" value="yes"> Yes
+            </label>
+
+            <label>
+            <input type="radio" name="choice" value="no"> No
+            </label>
+
+
+            <input type="submit" value="Submit">
+        </form>
+    </main>
+
+
+{% endblock %}

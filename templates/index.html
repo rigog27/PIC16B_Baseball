@@ -2,43 +2,48 @@
 
 {% block body %}
 
-<style>
-    form {
-        display: flex;
-        gap: 30px;          /* spacing between fields */
-        align-items: flex-start;
-    }
+<main>
+    <p>Input Information</p>
 
-    .field {
-        display: flex;
-        flex-direction: column;   /* label above input */
-    }
-</style>
+    <form method="POST" action="/" class="input-form">
 
-    <main>
-        <p>Input Information</p>
-        <form method="POST" action="/">
+        <div class="field">
             <label for="batter">Batter:</label>
-            <input type="text" id="batter" name="batter" required><br><br>
+            <select name="batter" id="batter">
+                {% for batter in batters %}
+                    <option value="{{ batter }}">{{ batter }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
 
+        <div class="field">
             <label for="strikes">Strikes:</label>
-            <input type="strikes" id="strikes" name="strikes" required><br><br>
+            <input type="text" id="strikes" name="strikes" required>
+        </div><br>
 
+        <div class="field">
             <label for="balls">Balls:</label>
-            <input type="balls" id="balls" name="balls" required><br><br>
-            
-            <label>
-            <input type="radio" name="choice" value="yes"> Yes
-            </label>
+            <input type="text" id="balls" name="balls" required>
+        </div><br>
 
-            <label>
-            <input type="radio" name="choice" value="no"> No
-            </label>
+        <div class="field checkbox-field">
+            <label for="on_1b">On first base:</label>
+            <input type="checkbox" id="on_1b" name="on_1b">
+        </div><br>
 
+        <div class="field checkbox-field">
+            <label for="on_2b">On second base:</label>
+            <input type="checkbox" id="on_2b" name="on_2b">
+        </div><br>
 
-            <input type="submit" value="Submit">
-        </form>
-    </main>
+        <div class="field checkbox-field">
+            <label for="on_3b">On third base:</label>
+            <input type="checkbox" id="on_3b" name="on_3b">
+        </div><br>
 
+        <input type="submit" value="Submit">
+
+    </form>
+</main>
 
 {% endblock %}

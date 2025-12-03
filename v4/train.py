@@ -1,7 +1,3 @@
-# ============================
-# train.py (Leak-Proof Version)
-# ============================
-
 import pandas as pd
 import numpy as np
 import torch
@@ -23,9 +19,7 @@ from config import (
 from dataset import YamaPADataset, yama_collate
 from model import YamamotoPitchRNN
 
-# -------------------------------------------------
-# Extra numeric features: batter stats vs pitch type
-# -------------------------------------------------
+# batter statistics for more features
 BATTER_STAT_COLS = [
     "AVG_FF", "AVG_FS", "AVG_CU", "AVG_FC", "AVG_SI", "AVG_SL",
     "OBP_FF", "OBP_FS", "OBP_CU", "OBP_FC", "OBP_SI", "OBP_SL",
@@ -51,9 +45,7 @@ torch.manual_seed(RANDOM_SEED)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(RANDOM_SEED)
 
-# -------------------------------------------------
-# Load pitch data and merge batter stats
-# -------------------------------------------------
+# load the data
 df = pd.read_csv("yamamoto_v3_pitches_2025.csv")
 batter_stats = pd.read_csv("batter_stats.csv")
 
@@ -72,21 +64,18 @@ df = df.merge(
 df[BATTER_STAT_COLS] = df[BATTER_STAT_COLS].astype(float).fillna(df[BATTER_STAT_COLS].mean())
 df[NUMERIC_COLS] = df[NUMERIC_COLS].astype(float)
 
-# -------------------------------------------------
-# Pitch Distribution
-# -------------------------------------------------
+
+# show the true pitch distributions
 pitch_counts = df["pitch_type"].value_counts(normalize=True).sort_index()
 pitch_counts_raw = df["pitch_type"].value_counts().sort_index()
 
-print("\n--- TRUE PITCH DISTRIBUTION (WITH BATTER STATS) ---")
+print("\n True Pitch Distribution:")
 for pitch in pitch_counts.index:
     pct = 100 * pitch_counts[pitch]
     raw = pitch_counts_raw[pitch]
     print(f"{pitch:>3s} : {pct:6.2f}% ({raw} pitches)")
 
-# -------------------------------------------------
-# Train / Validation split (LEAK-PROOF + SAVED)
-# -------------------------------------------------
+# split the train and validation data
 game_ids = df["game_pk"].unique()
 np.random.shuffle(game_ids)
 
@@ -94,7 +83,7 @@ split_idx = int(0.8 * len(game_ids))
 train_games = set(game_ids[:split_idx])
 val_games   = set(game_ids[split_idx:])
 
-# >>> Save splits so evaluate.py uses EXACT SAME SET <<<
+# save the splits so that evaluate.py uses the same set
 np.save("train_games.npy", np.array(list(train_games)))
 np.save("val_games.npy", np.array(list(val_games)))
 print(f"\nSaved train_games.npy and val_games.npy ({len(train_games)} train games, {len(val_games)} val games).")
@@ -121,9 +110,7 @@ val_loader = DataLoader(
     collate_fn=yama_collate,
 )
 
-# -------------------------------------------------
-# Model setup
-# -------------------------------------------------
+# model set up
 num_pitch_types        = int(df["pitch_type_idx"].max() + 1)
 num_prev_pitch_tokens  = int(df["prev_pitch_idx"].max() + 1)
 num_batter_hands       = int(df["batter_hand_idx"].max() + 1)
@@ -140,9 +127,7 @@ model = YamamotoPitchRNN(
     dropout=DROPOUT,
 ).to(DEVICE)
 
-# -------------------------------------------------
-# Loss / Optimizer
-# -------------------------------------------------
+# loss and optimizer
 pitch_freq = df["pitch_type_idx"].value_counts().sort_index()
 inv_freq   = 1.0 / pitch_freq.values
 alpha      = 0.25
@@ -165,9 +150,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
     optimizer, T_max=NUM_EPOCHS
 )
 
-# -------------------------------------------------
-# Training Loop
-# -------------------------------------------------
+# training loops
 train_losses, val_losses = [], []
 train_accs, val_accs = [], []
 
@@ -176,7 +159,6 @@ epochs_no_improve = 0
 
 for epoch in range(1, NUM_EPOCHS + 1):
 
-    # -------- Training --------
     model.train()
     total_loss = 0.0
     running_correct = 0
@@ -271,7 +253,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
 print(f"\nBest validation loss: {best_val_loss:.4f}")
 print(f"Best model saved to {BEST_MODEL_PATH}")
 
-# -------- Save curves --------
+# plot and save the loss and accuracy
 plt.figure()
 plt.plot(train_losses, label="Train Loss")
 plt.plot(val_losses, label="Val Loss")

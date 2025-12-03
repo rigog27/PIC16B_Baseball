@@ -18,12 +18,12 @@ class YamamotoPitchRNN(nn.Module):
     ):
         super().__init__()
 
-        # -------- Embeddings --------
+        # embeddings
         self.prev_pitch_emb  = nn.Embedding(num_prev_pitch_tokens, prev_pitch_emb_dim)
         self.batter_hand_emb = nn.Embedding(num_batter_hands, batter_hand_emb_dim)
         self.prev_result_emb = nn.Embedding(num_prev_result_tokens, prev_result_emb_dim)
 
-        # -------- Pre-encoder MLP --------
+        # pre-encoder mlp
         combined_in_dim = (
             prev_pitch_emb_dim
             + batter_hand_emb_dim
@@ -36,7 +36,7 @@ class YamamotoPitchRNN(nn.Module):
             nn.Dropout(dropout)
         )
 
-        # -------- GRU backbone --------
+        # GRU backbone
         self.rnn = nn.GRU(
             input_size=hidden_size,
             hidden_size=hidden_size,
@@ -45,10 +45,10 @@ class YamamotoPitchRNN(nn.Module):
             dropout=dropout if num_layers > 1 else 0.0
         )
 
-        # -------- LayerNorm --------
+        # LayerNorm
         self.layernorm = nn.LayerNorm(hidden_size)
 
-        # -------- Optional Attention --------
+        # optional attention
         self.attn = nn.MultiheadAttention(
             embed_dim=hidden_size,
             num_heads=2,
@@ -56,7 +56,7 @@ class YamamotoPitchRNN(nn.Module):
             batch_first=True
         )
 
-        # -------- Output head --------
+        # output head
         self.fc_out = nn.Sequential(
             nn.Dropout(dropout),
             nn.Linear(hidden_size, num_pitch_types)

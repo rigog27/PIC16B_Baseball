@@ -33,7 +33,6 @@ df[NUMERIC_COLS]     = df[NUMERIC_COLS].astype(float)
 #Load EXACT train/val split
 train_games = set(np.load("train_games.npy"))
 val_games   = set(np.load("val_games.npy"))
-print(f"Loaded split: {len(train_games)} train games, {len(val_games)} val games.")
 
 val_df = df[df["game_pk"].isin(val_games)].copy()
 val_pas = val_df[["game_pk", "at_bat_number"]].drop_duplicates().to_numpy().tolist()
@@ -95,9 +94,9 @@ unique_classes = sorted(df["pitch_type_idx"].unique())
 class_names    = [df[df["pitch_type_idx"] == i]["pitch_type"].iloc[0] for i in unique_classes]
 
 overall_acc = (all_preds == all_labels).mean()
-print(f"\nOVERALL VALIDATION ACCURACY: {overall_acc:.4f}")
+print(f"\nOverall Validation Accuracy: {overall_acc:.4f}")
 
-print("\nPER-PITCH ACCURACY:")
+print("\nPer-Pitch Accuracy:")
 for i, name in zip(unique_classes, class_names):
     mask = all_labels == i
     if mask.sum() == 0:
@@ -111,8 +110,6 @@ cm = confusion_matrix(all_labels, all_preds, labels=unique_classes)
 fig, ax = plt.subplots(figsize=(8, 8))
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
 disp.plot(ax=ax, xticks_rotation="vertical")
-plt.title("Confusion Matrix — Pitch Type Prediction")
+plt.title("Confusion Matrix Pitch Type Prediction")
 plt.savefig("confusion_matrix_v3.png", dpi=200, bbox_inches="tight")
 plt.close()
-
-print("Saved confusion matrix to confusion_matrix_v3.png")

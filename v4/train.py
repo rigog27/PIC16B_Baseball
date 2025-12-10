@@ -86,7 +86,6 @@ val_games   = set(game_ids[split_idx:])
 # save the splits so that evaluate.py uses the same set
 np.save("train_games.npy", np.array(list(train_games)))
 np.save("val_games.npy", np.array(list(val_games)))
-print(f"\nSaved train_games.npy and val_games.npy ({len(train_games)} train games, {len(val_games)} val games).")
 
 train_df = df[df["game_pk"].isin(train_games)].copy()
 val_df   = df[df["game_pk"].isin(val_games)].copy()
@@ -196,7 +195,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
     train_losses.append(avg_train_loss)
     train_accs.append(avg_train_acc)
 
-    # -------- Validation --------
+    # validation
     model.eval()
     val_loss = 0.0
     correct = 0
@@ -250,9 +249,6 @@ for epoch in range(1, NUM_EPOCHS + 1):
         print(f"\nEarly stopping after {epoch} epochs.")
         break
 
-print(f"\nBest validation loss: {best_val_loss:.4f}")
-print(f"Best model saved to {BEST_MODEL_PATH}")
-
 # plot and save the loss and accuracy
 plt.figure()
 plt.plot(train_losses, label="Train Loss")
@@ -269,5 +265,3 @@ plt.legend()
 plt.title("Accuracy Curve")
 plt.savefig(ACC_CURVE_PATH, dpi=200)
 plt.close()
-
-print(f"Saved curves: {LOSS_CURVE_PATH}, {ACC_CURVE_PATH}")

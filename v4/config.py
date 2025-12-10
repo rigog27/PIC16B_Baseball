@@ -1,28 +1,21 @@
 import torch
 
-# -----------------------------
-# Device
-# -----------------------------
+# device
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# -----------------------------
-# Training params
-# -----------------------------
+# parameters used in training
 BATCH_SIZE = 32
 NUM_EPOCHS = 22
-LEARNING_RATE = 1e-3 #prev: 5e-4 (slow)
+LEARNING_RATE = 1e-3
 GRAD_CLIP = 1.0
 
-# -----------------------------
-# Model params
-# -----------------------------
-HIDDEN_SIZE = 64 #default is 64
-NUM_LAYERS = 2 # default is 2 (we are doing 2 layer GRU)
-DROPOUT = 0 #default is 0.25, note if you set to 1-layer GRU, model disregards dropout
 
-# -----------------------------
-# Numeric feature columns (V2)
-# -----------------------------
+# parameters for the model
+HIDDEN_SIZE = 64
+NUM_LAYERS = 2
+DROPOUT = 0
+
+# columns wanted
 NUMERIC_COLS = [
     "balls",
     "strikes",

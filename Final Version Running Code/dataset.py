@@ -42,7 +42,6 @@ class YamaPADataset(Dataset):
             dtype=torch.float32
         )
 
-        # Labels (pitch_type_idx) per pitch
         labels = torch.tensor(sub["pitch_type_idx"].values, dtype=torch.long)
 
         return prev_pitch_idx, batter_hand_idx, prev_result_idx, numeric_feats, labels
@@ -65,15 +64,11 @@ def yama_collate(batch):
     hand_padded = pad_sequence(hand_list, batch_first=True, padding_value=0)
     prev_res_padded = pad_sequence(prev_res_list, batch_first=True, padding_value=0)
 
-    # Labels padded with -100 so CrossEntropyLoss(ignore_index=-100) works
     num_padded = pad_sequence(num_list, batch_first=True, padding_value=0.0)
-    # Labels padded with -100 so CrossEntropyLoss(ignore_index=-100) works
     labels_padded = pad_sequence(label_list, batch_first=True, padding_value=-100)
 
-    # Lengths of original sequences before padding
     lengths = torch.tensor([len(x) for x in label_list], dtype=torch.long)
     max_len = labels_padded.size(1)
-    # boolean mask
     mask = (torch.arange(max_len).unsqueeze(0) < lengths.unsqueeze(1))
 
     return prev_padded, hand_padded, prev_res_padded, num_padded, labels_padded, mask

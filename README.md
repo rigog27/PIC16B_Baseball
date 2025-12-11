@@ -1,4 +1,4 @@
-This project builds a neural network model that predicts the next pitch type thrown by MLB pitcher Yoshinobu Yamamoto, who uses a diverse six-pitch mix:
+This project builds a recurrent neural network that predicts the next pitch type thrown by MLB pitcher Yoshinobu Yamamoto, who uses a diverse six-pitch mix:
 
 FF – Four-Seam Fastball
 

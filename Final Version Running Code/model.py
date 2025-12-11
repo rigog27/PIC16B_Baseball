@@ -2,6 +2,13 @@ import torch
 import torch.nn as nn
 
 class YamamotoPitchRNN(nn.Module):
+    """
+    This model takes categorical pitch context features (previous pitch type,
+    batter handedness, previous pitch result) along with numeric per-pitch
+    features, embeds and mixes them through an MLP, and processes the resulting
+    sequence with a GRU followed by lightweight self-attention. It outputs
+    per-timestep logits over pitch types.
+    """
     def __init__(
         self,
         num_pitch_types,
@@ -9,12 +16,12 @@ class YamamotoPitchRNN(nn.Module):
         num_batter_hands,
         num_prev_result_tokens,
         input_numeric_dim,
-        hidden_size=128,
-        num_layers=2,
-        dropout=0.20,
-        prev_pitch_emb_dim=16,
-        batter_hand_emb_dim=4,
-        prev_result_emb_dim=8,
+        hidden_size=128, #Hidden dimensionality for GRU and attention.
+        num_layers=2, #Number of GRU layers
+        dropout=0.20, #Dropout applied in the MLP, GRU if num_layers > 1, and attention.
+        prev_pitch_emb_dim=16, #Embedding dimension for previous pitch type.
+        batter_hand_emb_dim=4, #Embedding dimension for batter handedness.
+        prev_result_emb_dim=8, #Embedding dimension for previous pitch result.
     ):
         super().__init__()
 

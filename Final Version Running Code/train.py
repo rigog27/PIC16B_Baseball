@@ -28,9 +28,7 @@ BATTER_STAT_COLS = [
 
 ALL_NUMERIC_COLS = NUMERIC_COLS + BATTER_STAT_COLS
 
-# -------------------------------------------------
-# Reproducibility + regularization hyperparams
-# -------------------------------------------------
+# choose random seed, weights, label smoothing, and patience
 RANDOM_SEED   = 42
 WEIGHT_DECAY  = 1e-4
 LABEL_SMOOTH  = 0.1

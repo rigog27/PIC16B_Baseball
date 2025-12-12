@@ -22,7 +22,7 @@ The final system achieves approximately 82% accuracy on a leak-proof, game-level
 Library Requirements:
 pybaseball, Numpy, Pytorch, Pandas, matplotlib
 
-To run, execute lines !train.py and !evaluate.py through the main.ipynb Jupyter Notebook. Requires 
+To run, download Final Version Running code folder and upload to Jupyter Notebook. Then, execute lines !train.py and !evaluate.py through the main.ipynb Jupyter Notebook. Requires 
 all files contained inside the Final Version Running Code Folder. Both evaluate and train require 
 model.py to run as well. 
 

@@ -27,3 +27,8 @@ all files contained inside the Final Version Running Code Folder. Both evaluate 
 model.py to run as well. 
 
 train.py uses yamamoto_v3_pitches_2025.csv which is created by running yamamoto_v3_script.ipynb
+
+Group Contributions:
+Thomas - Collected initial data with Baseball Savant, Batter data collection and cleaning, worked on RNN, improvement of pitch model, dealt with overfitting + data leakage. 
+Harry - Collected initial data with Baseball Savant, Pitching data collection and cleaning, worked on RNN, helped write functions in each module.
+Rigo - Initialized pybaseball module, constructed base of RNN, worked to improve pitch model, wrote code for visualization. 
